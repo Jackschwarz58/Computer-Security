@@ -2,10 +2,8 @@
 #include <openssl/bn.h>
 #define NBITS 256
 
-void printBN(char *msg, BIGNUM * a)
+void printBN(char *msg, BIGNUM * a) //Given in the PDF
 {
-    /* Use BN_bn2hex(a) for hex string
-    * Use BN_bn2dec(a) for decimal string */
     char * number_str = BN_bn2hex(a);
     printf("%s %s\n", msg, number_str);
     OPENSSL_free(number_str);
@@ -30,10 +28,10 @@ void task1() {
     BIGNUM *final = BN_new();
 
     BN_hex2bn(&one, "1");
-    BN_sub(pMinus, p, one);
-    BN_sub(qMinus, q, one);
-    BN_mul(sum, pMinus, qMinus, ctx);
-    BN_mod_inverse(final,e, sum, ctx);
+    BN_sub(pMinus, p, one); //(p-1)
+    BN_sub(qMinus, q, one); //(q-1)
+    BN_mul(sum, pMinus, qMinus, ctx); //(p-1)(q-1)
+    BN_mod_inverse(final, e, sum, ctx); 
 
     printBN("Private Key Found: ", final);
 }
@@ -57,7 +55,7 @@ void task2() {
     printBN("Encryption Result: ", final);
     printf("\n");
 
-    BIGNUM *check = BN_new();
+    BIGNUM *check = BN_new(); //To check our result
 
     BN_mod_exp(check, final, d, n, ctx);
 
@@ -126,10 +124,10 @@ void task4() {
 void task5() {
     BIGNUM *n = BN_new();
     BIGNUM *s = BN_new();
-    BIGNUM *s_corrupt = BN_new();
+    BIGNUM *s_corrupt = BN_new(); //Changed last 2 chars
     BIGNUM *e = BN_new();
     BIGNUM *final1 = BN_new();
-    BIGNUM *final2 = BN_new();
+    BIGNUM *final2 = BN_new(); //To hold decrypted corrupt signature message
 
     BN_hex2bn(&e, "010001");
     BN_hex2bn(&s, "643D6F34902D9C7EC90CB0B2BCA36C47FA37165C0005CAB026C0542CBDB6802F");
